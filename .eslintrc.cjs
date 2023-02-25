@@ -15,8 +15,15 @@ module.exports = {
   parserOptions: {
     project: "./tsconfig.json",
   },
-  plugins: ["@typescript-eslint"],
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  plugins: ["@typescript-eslint", "prettier"],
+  extends: [
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:prettier/recommended",
+      "next/core-web-vitals",
+      "plugin:@typescript-eslint/recommended"
+  ],
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
@@ -25,5 +32,7 @@ module.exports = {
         fixStyle: "inline-type-imports",
       },
     ],
+    "@typescript-eslint/array-type": "error",
+    "prettier/prettier": "error"
   },
 };

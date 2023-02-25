@@ -1,8 +1,9 @@
-import { Button, Text, Image } from "@mantine/core";
+import { Button, Text, Image} from "@mantine/core";
+import Link from "next/link"
 
 const Navbar = () => {
     return (
-        <div className="fixed flex items-center justify-between bg-green-100 top-0 right-0 left-0 h-16 px-6 shadow-md">
+        <div className="fixed flex bg-green-50  items-center justify-between top-0 right-0 left-0 h-16 px-6 shadow-md">
             <div className="flex items-center">
                 <Image
                     width={45}
@@ -13,7 +14,10 @@ const Navbar = () => {
                 <Text className="ml-3">EcoMap</Text>
             </div>
             <div className="flex justify-between">
-                <Button>Log in</Button>
+                <Link href="/login">
+                    <Button className="m-2">Log in</Button>
+                </Link>
+                <Button className="m-2">Register</Button>
             </div>
         </div>
     )
