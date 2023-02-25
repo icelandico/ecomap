@@ -55,6 +55,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    location      String
+    initiatives   Initiative[]
 }
 
 model VerificationToken {
@@ -63,4 +65,33 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum Category {
+    EDUCATION
+    CLEANING
+}
+
+enum InitiativeType {
+    PRIVATE
+    PUBLIC
+}
+
+enum InitiativeStatus {
+    PLANNED
+    IN_PROGRESS
+    COMPLETED
+}
+
+model Initiative {
+    id            String           @id @default(cuid())
+    name          String
+    description   String
+    type          InitiativeType   @default(PUBLIC)
+    owner         User             @relation(fields: [ownerId], references: [id])
+    ownerId       String
+    status        InitiativeStatus @default(PLANNED)
+    startDate     DateTime
+    endDate       DateTime
+    municipality  String
 }
