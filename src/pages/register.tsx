@@ -1,12 +1,15 @@
 import { type NextPage } from "next";
 import { PasswordInput, TextInput, Title } from "@mantine/core";
 import { IconAt, IconLock, IconUser } from "@tabler/icons-react";
+import { Modal, Button } from "@mantine/core";
 
 import { api } from "@/utils/api";
-import { Button } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import Loader from "@/components/Loader/Loader";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import InformationBadge from "@/components/InformationBadge/InformationBadge";
 
 type CreateUserForm = {
   name: string;
@@ -15,9 +18,18 @@ type CreateUserForm = {
 };
 
 const Register: NextPage = () => {
+  const [confirmationOpened, setConfirmationOpened] = useState(false);
+  const router = useRouter();
+
   const createUser = api.user.createUser.useMutation({
-    onSuccess: () => console.log("USER ADDED"),
+    onSuccess: () => setConfirmationOpened(true),
   });
+
+  const handleAfterRegister = async () => {
+    setConfirmationOpened(false);
+    form.reset();
+    await router.push("/login");
+  };
 
   const createUserSchema = z
     .object({
@@ -50,6 +62,7 @@ const Register: NextPage = () => {
   });
 
   const handleRegisterUser = (user: CreateUserForm) => {
+    setConfirmationOpened(true);
     createUser.mutate({
       name: user.name,
       password: user.password,
@@ -96,6 +109,16 @@ const Register: NextPage = () => {
           Submit
         </Button>
       </form>
+      <Modal
+        opened={confirmationOpened}
+        onClose={() => void handleAfterRegister()}
+        title="User Registered"
+      >
+        <InformationBadge
+          text={"Account created. You'll be redirected to Login page."}
+        />
+        <Button onClick={() => void handleAfterRegister()}>Close</Button>
+      </Modal>
     </div>
   );
 };
