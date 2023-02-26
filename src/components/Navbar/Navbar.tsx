@@ -17,7 +17,9 @@ const Navbar = () => {
         <Link href="/login">
           <Button className="m-2">Log in</Button>
         </Link>
-        <Button className="m-2">Register</Button>
+        <Link href="/register">
+          <Button className="m-2">Register</Button>
+        </Link>
       </div>
     </div>
   );
