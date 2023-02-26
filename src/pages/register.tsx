@@ -4,41 +4,70 @@ import { IconAt, IconLock, IconUser } from "@tabler/icons-react";
 
 import { api } from "@/utils/api";
 import { Button } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
+import { z } from "zod";
+import Loader from "@/components/Loader/Loader";
+
+type CreateUserForm = {
+  name: string;
+  password: string;
+  email: string;
+};
 
 const Register: NextPage = () => {
+  const createUser = api.user.createUser.useMutation({
+    onSuccess: () => console.log("USER ADDED"),
+  });
+
+  const createUserSchema = z
+    .object({
+      name: z.string().min(4, { message: "Name too short" }),
+      email: z.string().email({ message: "Invalid email" }),
+      password: z
+        .string()
+        .min(8, { message: "Password too short" })
+        .refine(
+          (value) => /^.*[!#$@%&?_].*$/.test(value),
+          "Must contain special character"
+        ),
+      confirmPassword: z
+        .string()
+        .min(1, { message: "Confirm password is required" }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "Passwords don't match",
+    });
+
   const form = useForm({
+    validate: zodResolver(createUserSchema),
     initialValues: {
       email: "",
-      username: "",
+      name: "",
       password: "",
-      confirmedPassword: "",
-    },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      username: (value) =>
-        /([a-zA-Z]+){4,}/.test(value) ? null : "Invalid name",
-      password: (value) =>
-        /^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$@%&? "]).*$/.test(value)
-          ? null
-          : "Invalid password",
-      confirmedPassword: (value) =>
-        value === form.values.password ? null : "Passwords don't match",
+      confirmPassword: "",
     },
   });
 
+  const handleRegisterUser = (user: CreateUserForm) => {
+    createUser.mutate({
+      name: user.name,
+      password: user.password,
+      email: user.email,
+    });
+  };
+
   return (
-    <div className="m-0 m-auto flex w-1/5 flex-col items-center justify-center">
+    <div className="relative m-0 m-auto flex w-1/5 flex-col items-center justify-center">
       <Title className="mb-4" order={2}>
         Create account
       </Title>
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <form onSubmit={form.onSubmit((values) => handleRegisterUser(values))}>
         <TextInput
           className="mb-2 w-full"
           icon={<IconUser />}
           label="Your name"
-          {...form.getInputProps("username")}
+          {...form.getInputProps("name")}
         />
         <TextInput
           className="mb-2 w-full"
@@ -56,11 +85,16 @@ const Register: NextPage = () => {
           className="mb-2 w-full"
           icon={<IconLock />}
           label="Confirm password"
-          {...form.getInputProps("confirmedPassword")}
+          {...form.getInputProps("confirmPassword")}
         />
-        <Button type="submit" className="mt-6 w-full">
+        <Button
+          type="submit"
+          className="mt-6 w-full"
+          loading={createUser.isLoading}
+        >
           Submit
         </Button>
+        <Loader isVisible={createUser.isLoading} />
       </form>
     </div>
   );
