@@ -28,7 +28,7 @@ const Register: NextPage = () => {
         .min(8, { message: "Password too short" })
         .refine(
           (value) => /^.*[!#$@%&?_].*$/.test(value),
-          "Must contain special character"
+          "Must contain special character: !#$@%&?_"
         ),
       confirmPassword: z
         .string()
@@ -59,6 +59,7 @@ const Register: NextPage = () => {
 
   return (
     <div className="relative m-0 m-auto flex w-1/5 flex-col items-center justify-center">
+      <Loader isVisible={createUser.isLoading} />
       <Title className="mb-4" order={2}>
         Create account
       </Title>
@@ -94,7 +95,6 @@ const Register: NextPage = () => {
         >
           Submit
         </Button>
-        <Loader isVisible={createUser.isLoading} />
       </form>
     </div>
   );
