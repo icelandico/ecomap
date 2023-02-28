@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 
 import { api } from "@/utils/api";
 
+import "leaflet/dist/leaflet.css";
 import "@/styles/globals.css";
 import { MantineProvider } from "@mantine/core";
 import Layout from "@/components/Layout/Layout";

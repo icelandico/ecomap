@@ -6,10 +6,10 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar />
-      <main className="px-6 pt-6">{children}</main>
-    </>
+      <main className="h-full px-6 pt-6">{children}</main>
+    </div>
   );
 };
 
