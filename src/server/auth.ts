@@ -6,8 +6,11 @@ import {
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
+import { loginSchema } from "@/pages/auth/login";
+import bcrypt from "bcryptjs";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -38,11 +41,22 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        // session.user.role = user.role; <-- put other properties on the session here
+      if (user) {
+        session.user = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        };
       }
       return session;
+    },
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
     },
   },
   adapter: PrismaAdapter(prisma),
@@ -50,6 +64,42 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
+      id: "ecomap",
+      name: "ecomap-login",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        const parsedCredentials = await loginSchema.parseAsync(credentials);
+
+        try {
+          const user = await prisma.user.findFirst({
+            where: { email: parsedCredentials.email },
+          });
+
+          if (!user) {
+            return Promise.reject(new Error("User does not exist"));
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            parsedCredentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            return Promise.reject(new Error("Wrong password"));
+          }
+
+          if (user && isPasswordValid) {
+            return Promise.resolve(user);
+          }
+        } catch (error) {
+          throw new Error("Unkown Error");
+        }
+      },
     }),
     /**
      * ...add more providers here.
@@ -61,6 +111,17 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 15 * 24 * 30 * 60,
+  },
+  jwt: {
+    maxAge: 15 * 24 * 30 * 60,
+  },
+  pages: {
+    signIn: "/auth/login",
+    newUser: "/auth/register",
+  },
 };
 
 /**

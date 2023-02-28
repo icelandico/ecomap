@@ -14,10 +14,10 @@ const Navbar = () => {
         <Text className="ml-3">EcoMap</Text>
       </div>
       <div className="flex justify-between">
-        <Link href="/login">
+        <Link href="/auth/login">
           <Button className="m-2">Log in</Button>
         </Link>
-        <Link href="/register">
+        <Link href="/auth/register">
           <Button className="m-2">Register</Button>
         </Link>
       </div>
