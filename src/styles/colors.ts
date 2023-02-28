@@ -6,5 +6,4 @@ const fullConfig = resolveConfig({
   theme,
 });
 
-type ColorsKeys = keyof typeof themeColors;
-export const themeColors = fullConfig.theme?.colors;
+export const themeColors = fullConfig.theme?.extend?.colors;

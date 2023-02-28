@@ -3,7 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 const Map = () => {
   return (
     <MapContainer
-      className="h-screen w-full"
+      className="z-0 h-screen w-full"
       center={[54.505, 18.33]}
       zoom={8}
       scrollWheelZoom={false}
