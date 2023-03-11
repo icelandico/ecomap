@@ -40,7 +40,9 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    session({ session, token, user }) {
+      console.log('User', user)
+      console.log('Token', token)
       if (user) {
         session.user = {
           id: user.id,
@@ -48,11 +50,13 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           image: user.image,
         };
+        // session.accessToken = token.accessToken;
       }
       return session;
     },
     jwt: ({ token, user }) => {
       if (user) {
+        console.log("token", user);
         token.id = user.id;
         token.email = user.email;
       }
@@ -113,10 +117,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 15 * 24 * 30 * 60,
-  },
-  jwt: {
-    maxAge: 15 * 24 * 30 * 60,
+    maxAge: 60 * 60 * 24,
   },
   pages: {
     signIn: "/auth/login",

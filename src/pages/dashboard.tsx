@@ -3,13 +3,14 @@ import { Text } from "@mantine/core";
 import { useSession } from "next-auth/react";
 
 const Dashboard: NextPage = () => {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
-  console.log("USER DATA", data);
+  console.log("DATA", data);
+  console.log("status", status);
 
   return (
     <div className="relative m-0 m-auto flex w-1/5 flex-col items-center justify-center">
-      <Text>LOGGED IN! {data?.user.name}</Text>
+      <Text>LOGGED IN? User: {data?.user.name}</Text>
     </div>
   );
 };
