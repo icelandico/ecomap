@@ -41,8 +41,6 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, token, user }) {
-      console.log('User', user)
-      console.log('Token', token)
       if (user) {
         session.user = {
           id: user.id,
@@ -50,7 +48,6 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           image: user.image,
         };
-        // session.accessToken = token.accessToken;
       }
       return session;
     },

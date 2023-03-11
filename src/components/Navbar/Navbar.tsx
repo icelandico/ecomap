@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className="sticky top-0 right-0 left-0 z-10 flex h-16 items-center justify-between bg-white px-6 shadow-md">
       <div className="relative flex cursor-pointer items-center">
-        <Link href={"/"} className="absolute top-0 left-0 right-0" />
+        <Link href={"/"} className="absolute top-0 left-0 right-0 bottom-0" />
         <IconTrees size={45} color={themeColors?.primaryGreen} />
         <Text className="ml-3">EcoMap</Text>
       </div>
