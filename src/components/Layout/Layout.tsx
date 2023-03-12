@@ -8,7 +8,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main className="h-full px-6 pt-6">{children}</main>
+      <main className="min-h-screen bg-gray-100 px-6 py-3">{children}</main>
     </div>
   );
 };

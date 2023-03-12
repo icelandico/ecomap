@@ -1,9 +1,13 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-const Map = () => {
+interface IMap {
+  styles?: string;
+}
+
+const Map = ({ styles }: IMap) => {
   return (
     <MapContainer
-      className="z-0 h-screen w-full"
+      className={`z-0 h-screen ${styles}`}
       center={[54.505, 18.33]}
       zoom={8}
       scrollWheelZoom={false}
