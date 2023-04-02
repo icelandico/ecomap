@@ -44,6 +44,7 @@ const MapOptions = () => {
           leftIcon={<IconCirclePlus />}
           className={"mr-3"}
           variant={"outline"}
+          onClick={() => console.log("ADD ACTIOn")}
         >
           Create action
         </Button>

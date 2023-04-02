@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   return (
     <div className="px-3 text-gray-700">
       <MapOptions />
-      <div className="flex gap-5 rounded bg-slate-50 shadow-md">
+      <div className="flex gap-5 rounded bg-slate-50 p-3 shadow-md">
         <Map styles="w-1/2 h-[calc(100vh-9rem)]" />
         <ActionsContent />
       </div>

@@ -7,7 +7,12 @@ interface IOptionSelector {
   handleChange: (option: ACTION_OPTIONS) => void;
 }
 
-const OptionSelector = ({ text, isActive, type, handleChange }: IOptionSelector) => {
+const OptionSelector = ({
+  text,
+  isActive,
+  type,
+  handleChange,
+}: IOptionSelector) => {
   const activeBorder = isActive ? "border-primaryGreen" : "";
 
   const getActionColor = () => {
