@@ -1,7 +1,7 @@
-import { Button } from "@mantine/core";
+import { Button, ButtonProps } from "@mantine/core";
 import Link from "next/link";
 
-interface ILinkButton {
+interface ILinkButton extends ButtonProps {
   route: string;
   text: string;
   leftIcon?: React.ReactNode;
@@ -16,8 +16,13 @@ const LinkButton = ({
   ...props
 }: ILinkButton) => {
   return (
-    <Link href={route} {...props}>
-      <Button leftIcon={leftIcon} rightIcon={rightIcon} className="m-2">
+    <Link href={route}>
+      <Button
+        leftIcon={leftIcon}
+        rightIcon={rightIcon}
+        className="m-2"
+        {...props}
+      >
         {text}
       </Button>
     </Link>

@@ -2,6 +2,8 @@ import { Button } from "@mantine/core";
 import { IconCirclePlus } from "@tabler/icons-react";
 import OptionSelector from "@/components/MapOptions/OptionSelector";
 import { useState } from "react";
+import { type Session } from "next-auth";
+import LinkButton from "@/components/Buttons/LinkButton";
 
 export enum ACTION_OPTIONS {
   ACTIONS = "ACTIONS",
@@ -9,7 +11,11 @@ export enum ACTION_OPTIONS {
   EDUCATION = "EDUCATION",
 }
 
-const MapOptions = () => {
+interface IMapOptions {
+  session: Session | null;
+}
+
+const MapOptions = ({ session }: IMapOptions) => {
   const [activeOption, setActiveOption] = useState<ACTION_OPTIONS>(
     ACTION_OPTIONS.ACTIONS
   );
@@ -40,14 +46,14 @@ const MapOptions = () => {
         />
       </div>
       <div>
-        <Button
-          leftIcon={<IconCirclePlus />}
-          className={"mr-3"}
-          variant={"outline"}
-          onClick={() => console.log("ADD ACTIOn")}
-        >
-          Create action
-        </Button>
+        {session ? (
+          <LinkButton
+            variant={"outline"}
+            leftIcon={<IconCirclePlus />}
+            route={"/add-initiative"}
+            text={"Create Initiative"}
+          />
+        ) : null}
       </div>
     </div>
   );
