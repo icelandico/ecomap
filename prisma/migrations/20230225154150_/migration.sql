@@ -17,7 +17,7 @@ CREATE TYPE "InitiativeStatus" AS ENUM ('PLANNED', 'IN_PROGRESS', 'COMPLETED');
 ALTER TABLE "User" ADD COLUMN     "location" TEXT NOT NULL;
 
 -- CreateTable
-CREATE TABLE "Initiative" (
+CREATE TABLE "Add_initiative" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -32,4 +32,4 @@ CREATE TABLE "Initiative" (
 );
 
 -- AddForeignKey
-ALTER TABLE "Initiative" ADD CONSTRAINT "Initiative_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Add_initiative" ADD CONSTRAINT "Initiative_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
